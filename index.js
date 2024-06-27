@@ -5,7 +5,9 @@ const app = express();
 require("dotenv").config()
 const passport=require('./passport')
 const googleAuth=require('./googleAuth')
+// require('./openAi')
 const session = require('express-session');
+app.use(express.json())
 let userProfile,at;
 
 

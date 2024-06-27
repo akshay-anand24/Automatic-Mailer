@@ -4,6 +4,7 @@ Router=express.Router()
 const passport=require('./passport')
 const GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 const {readEmails,readEmailContent}=require('./googleApiHandlers')
+const run=require('./openAi')
 
 
 passport.use(new GoogleStrategy({
@@ -30,10 +31,13 @@ Router.get('/google/callback',
         userProfile=req.user
         const emails = await readEmails(req.user.accessToken); // Replace with actual email reading function
         const emailContent = await readEmailContent(req.user.accessToken, emails[0].id)
+        const reply=await run("just mark this email for me in three categories 1.Interested 2.Not Interested just reply with one word"
+        +emailContent)
         res.send(emailContent); // Pass retrieved emails to template (optional)
-      } catch (err) {
+      } 
+      catch (err) {
         console.error('Error reading emails:', err);
-        res.send('/errorsssssssssss');
+        res.send('/errorss');
       }
   });
 

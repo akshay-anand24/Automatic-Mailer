@@ -42,7 +42,7 @@ async function readEmailContent(accessToken, emailId) {
         id: emailId
       });
       const payload = res.data.payload;
-    //   return payload
+      // return payload.body.data
 
       // Check for plain text content (modify for HTML handling)
       if(payload.body.data){
@@ -50,7 +50,10 @@ async function readEmailContent(accessToken, emailId) {
         return decodedData;
       }
       else if (payload.parts[0].body.data ) {
-        const decodedData = Buffer.from(payload.parts[1].body.data, 'base64').toString('utf-8');
+        if(payload.parts[1])
+         decodedData = Buffer.from(payload.parts[1].body.data, 'base64').toString('utf-8');
+        else
+         decodedData= Buffer.from(payload.parts[0].body.data, 'base64').toString('utf-8')
         return decodedData;
       } 
       else if (payload.parts[0].parts[1].body.data ) {
